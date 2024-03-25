@@ -113,63 +113,18 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, arg):
-        """ Create a new object """
-        if not arg:
+    def do_create(self, args):
+        """ Create an object of any class"""
+        if not args:
             print("** class name missing **")
             return
-
-        # Split the arguments into class name and key-value pairs
-        args_list = arg.split()
-        class_name = args_list[0]
-        kv_pairs = args_list[1:]
-
-        # Check if the class exists in the dictionary of classes
-        if class_name not in self.__class__.classes:
+        elif args not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-
-        # Create an empty dictionary to hold key-value pairs
-        kwargs = {}
-
-        # Iterate through key-value pairs
-        for pair in kv_pairs:
-            # Split the key-value pair into key and value
-            try:
-                key, value = pair.split('=')
-            except ValueError:
-                print("** invalid format: <key>=<value> **")
-                return
-
-            # Remove surrounding double quotes and replace underscores with spaces
-            value = value.strip('"').replace('\\"', '"').replace('_', ' ')
-
-            # Convert value to the appropriate type (string, float, or int)
-            if value[0] == '"':
-                # String value
-                kwargs[key] = value[1:-1]  # Remove surrounding double quotes
-            elif '.' in value:
-                # Float value
-                try:
-                    kwargs[key] = float(value)
-                except ValueError:
-                    print("** invalid value for float: {} **".format(value))
-                    return
-            else:
-                # Integer value
-                try:
-                    kwargs[key] = int(value)
-                except ValueError:
-                    print("** invalid value for integer: {} **".format(value))
-                    return
-
-        # Create an instance of the specified class with the parsed kwargs
-        try:
-            new_instance = self.__class__.classes[class_name](**kwargs)
-            new_instance.save()
-            print(new_instance.id)
-        except Exception as e:
-            print(e)
+        new_instance = HBNBCommand.classes[args]()
+        storage.save()
+        print(new_instance.id)
+        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
