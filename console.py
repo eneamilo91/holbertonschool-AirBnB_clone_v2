@@ -114,35 +114,59 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """ Create an object of any class """
+        """ Create a new object """
         if not arg:
             print("** class name missing **")
             return
 
-        # Parse arguments
+        # Split the arguments into class name and key-value pairs
         args_list = arg.split()
         class_name = args_list[0]
-        args_list = args_list[1:]
+        kv_pairs = args_list[1:]
 
-        if class_name not in HBNBCommand.classes:
+        # Check if the class exists in the dictionary of classes
+        if class_name not in self.__class__.classes:
             print("** class doesn't exist **")
             return
 
         # Create an empty dictionary to hold key-value pairs
         kwargs = {}
 
-        # Iterate through the remaining arguments and parse key-value pairs
-        for arg in args_list:
-            if '=' in arg:
-                key, value = arg.split('=', 1)
-                # Remove double quotes and replace underscores with spaces
-                value = value.replace('\\"', '"').replace('_', ' ')
-                kwargs[key] = value
+        # Iterate through key-value pairs
+        for pair in kv_pairs:
+            # Split the key-value pair into key and value
+            try:
+                key, value = pair.split('=')
+            except ValueError:
+                print("** invalid format: <key>=<value> **")
+                return
 
-        # Create a new instance of the specified class with the parsed kwargs
+            # Remove surrounding double quotes and replace underscores with spaces
+            value = value.strip('"').replace('\\"', '"').replace('_', ' ')
+
+            # Convert value to the appropriate type (string, float, or int)
+            if value[0] == '"':
+                # String value
+                kwargs[key] = value[1:-1]  # Remove surrounding double quotes
+            elif '.' in value:
+                # Float value
+                try:
+                    kwargs[key] = float(value)
+                except ValueError:
+                    print("** invalid value for float: {} **".format(value))
+                    return
+            else:
+                # Integer value
+                try:
+                    kwargs[key] = int(value)
+                except ValueError:
+                    print("** invalid value for integer: {} **".format(value))
+                    return
+
+        # Create an instance of the specified class with the parsed kwargs
         try:
-            new_instance = HBNBCommand.classes[class_name](**kwargs)
-            new_instance.save()  # Save the object after creation
+            new_instance = self.__class__.classes[class_name](**kwargs)
+            new_instance.save()
             print(new_instance.id)
         except Exception as e:
             print(e)
