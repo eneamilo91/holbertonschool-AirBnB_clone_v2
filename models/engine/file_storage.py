@@ -13,11 +13,7 @@ class FileStorage:
         if cls is None:
             return FileStorage.__objects
         else:
-            my_list = []
-            for key, value in FileStorage.__objects.items():
-                if cls.__name__ in key:
-                    my_list.append(value)
-            return my_list
+            return {key: value for key, value in FileStorage.__objects.items() if cls.__name__ in k}
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -33,9 +29,9 @@ class FileStorage:
             json.dump(temp, f)
 
     def delete(self, obj=None):
-    """Delete obj from __objects if its inside"""
+        """Delete obj from __objects if its inside"""
         if obj is not None:
-            key = "{}.{}".format(obj.__class__, obj.id)
+            key = "{}.{}".format(obj.__class__.__name__, obj.id)
         if key in FileStorage.__objects:
             del FileStorage.__objects[key]
 
