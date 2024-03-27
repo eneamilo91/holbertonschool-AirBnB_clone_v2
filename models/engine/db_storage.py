@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" DBStorage engine setup"""
+'''
+DB ENGINE linked with SQLAlchemy
+'''
 
 from sqlalchemy import create_engine, text, MetaData
 from os import getenv
@@ -14,9 +16,9 @@ from models.review import Review
 
 
 class DBStorage:
-
-    """DBStorage class"""
-
+    '''
+    DBStorage class
+    '''
 
     __engine = None
     __session = None
@@ -45,18 +47,22 @@ class DBStorage:
             metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
-        """returns the dictionary of records of the specific class"""
-        my_dic = {}
+        """query on the current database session"""
+        obj_dict = {}
         if cls is not None:
-            result = self.__session.query(cls).all()
-            for obj in result:
-                my_dic[f"{obj.__class__.__name__}.{obj.id}] = obj
+            all = self.__session.query(cls).all()
+            for object in all:
+                temp_dict = object.to_dict()
+                key = temp_dict['__class__'] + '.' + temp_dict['id']
+                obj_dict[key] = object
         else:
             for table in DBStorage.tables.values():
-                result = self.__session.query(table).all()
-                for obj in result:
-                    my_dic[f"{obj.__class__.__name__}.{obj.id}] = obj
-        return my_dic
+                all = self.__session.query(table).all()
+                for object in all:
+                    temp_dict = object.to_dict()
+                    key = temp_dict['__class__'] + '.' + temp_dict['id']
+                    obj_dict[key] = object
+        return obj_dict
 
     def new(self, obj):
         """ADD THE OBJECT TO THE CURRENT
@@ -72,7 +78,6 @@ class DBStorage:
         """Delete an object from database"""
 
         self.__session.delete(obj)
-        self.__session.commit()
 
     def reload(self):
         """Create all tables"""
@@ -80,3 +85,7 @@ class DBStorage:
         Session = sessionmaker(self.__engine, expire_on_commit=False)
         self.__session = scoped_session(Session)
         Base.metadata.create_all(self.__engine)
+
+    def close(self):
+        """Close the sessions"""
+        self.__session.remove()
