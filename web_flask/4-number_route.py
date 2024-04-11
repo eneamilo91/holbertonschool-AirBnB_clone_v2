@@ -1,71 +1,41 @@
-<<<<<<< HEAD
-=======
 #!/usr/bin/python3
-"""Module of a python script"""
-
->>>>>>> f8fc929b8545ce466a6173b756146a580a15b191
+""" Script that starts a Flask web application """
 from flask import Flask
+
 
 app = Flask(__name__)
 
-<<<<<<< HEAD
-@app.route('/')
-def hello():
-    return 'Hello HBNB!'
 
-@app.route('/hbnb')
-def hbnb():
-    return 'HBNB'
+@app.route('/', strict_slashes=False)
+def hello_hbnb():
+    """ Function that displays Hello HBNB! """
+    return ("Hello HBNB!")
+
+
+@app.route('/hbnb', strict_slashes=False)
+def hbnb_1():
+    """ Function that displays HBNB """
+    return ("HBNB")
+
 
 @app.route('/c/<text>', strict_slashes=False)
-def c_text(text):
-    text = text.replace('_', ' ')
-    return 'C {}'.format(text)
+def hbnb_2(text):
+    """ Function that displays "C" followed by the value of the text"""
+    return ("C {}".format(text.replace("_", " ")))
 
-@app.route('/python/', defaults={'text': 'is cool'})
+
+@app.route('/python/', strict_slashes=False, defaults={'text': 'is cool'})
 @app.route('/python/<text>', strict_slashes=False)
-def python_text(text):
-    text = text.replace('_', ' ')
-    return 'Python {}'.format(text)
+def hbnb_3(text):
+    """ Function that displays "Python" followed by the value of the text"""
+    return ("Python {}".format(text.replace("_", " ")))
 
-@app.route('/number/<int:n>')
-def number(n):
-    return '{} is a number'.format(n)
+
+@app.route('/number/<int:n>', strict_slashes=False)
+def hbnb_4(n):
+    """ Function that displays "n is a number" """
+    return ("{} is a number".format(n))
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-=======
-@app.route('/',strict_slashes=False)
-def home():
-    """func to be executed"""
-    return "Hello HBNB!"
-
-@app.route('/hbnb',strict_slashes=False)
-def hbnb():
-    """func to be executed"""
-    return "HBNB"
-
-@app.route('/c/<text>',strict_slashes=False)
-def cisvariable(text):
-    """func to be executed"""
-    text=text.replace("_", " ")
-    return f"C {text}"
-
-@app.route('/python/<text>',strict_slashes=False)
-def pythonisvariable(text = "is cool"):
-    """func to be executed"""
-    if text:
-        text=text.replace("_", " ")
-        return f"Python {text}"
-    return f"Python {text}"
-
-
-@app.route('/number/<int:n>',strict_slashes=False)
-def number(n):
-    """func to be executed"""
-
-        return f"{n} is a number"
-
-if __name__ =='__main__':
-    app.run(host="0.0.0.0", port=5000)
->>>>>>> f8fc929b8545ce466a6173b756146a580a15b191
+    app.run(host="0.0.0.0", port=5000, debug=None)

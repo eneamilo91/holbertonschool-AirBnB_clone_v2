@@ -1,61 +1,47 @@
-<<<<<<< HEAD
-=======
 #!/usr/bin/python3
-"""Module of a python script"""
+"""
+Module to initiate a flask app
+"""
 
->>>>>>> f8fc929b8545ce466a6173b756146a580a15b191
+
 from flask import Flask
+
 
 app = Flask(__name__)
 
-<<<<<<< HEAD
+
 @app.route('/', strict_slashes=False)
-def index():
-    return "Hello HBNB!"
+def hello_hbnb():
+    """
+    set route
+    """
+    return ("Hello HBNB!")
+
 
 @app.route('/hbnb', strict_slashes=False)
-def hbnb():
-    return "HBNB"
+def hbnb_1():
+    """
+    set route
+    """
+    return ("HBNB")
+
 
 @app.route('/c/<text>', strict_slashes=False)
-def text_c(text):
-    text = text.replace("_", " ")
-    return f"C {text}"
+def hbnb_2(text):
+    """
+    set route
+    """
+    return ("C {}".format(text.replace("_", " ")))
 
-@app.route('/python/', defaults={'text': 'is_cool'})
+
+@app.route('/python/', strict_slashes=False, defaults={'text': 'is cool'})
 @app.route('/python/<text>', strict_slashes=False)
-def new_text(text):
-    text = text.replace("_", " ")
-    return f"Python {text}"
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)  
-=======
-@app.route('/',strict_slashes=False)
-def home():
-    """func to be executed"""
-    return "Hello HBNB!"
-
-@app.route('/hbnb',strict_slashes=False)
-def hbnb():
-    """func to be executed"""
-    return "HBNB"
-
-@app.route('/c/<text>',strict_slashes=False)
-def cisvariable(text):
-    """func to be executed"""
-    text=text.replace("_", " ")
-    return f"C {text}"
-
-@app.route('/python/<text>',strict_slashes=False)
-def pythonisvariable(text = "is cool"):
-    """func to be executed"""
-    if text:
-        text=text.replace("_", " ")
-        return f"Python {text}"
-    return f"Python {text}"
+def hbnb_3(text):
+    """
+    set route
+    """
+    return ("Python {}".format(text.replace("_", " ")))
 
 
-if __name__ =='__main__':
-    app.run(host="0.0.0.0", port=5000)
->>>>>>> f8fc929b8545ce466a6173b756146a580a15b191
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000, debug=None)
