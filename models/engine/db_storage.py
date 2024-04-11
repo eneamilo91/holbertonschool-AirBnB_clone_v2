@@ -64,10 +64,6 @@ class DBStorage:
         if obj:
             self.__session.delete(obj)
 
-    def close(self):
-        """Closes Session"""
-        self.__session.close()
-
     def reload(self):
         """Create database in Alchemy"""
         Base.metadata.create_all(self.__engine)
@@ -77,4 +73,4 @@ class DBStorage:
 
     def close(self):
         """Close session"""
-        self.__session.remove()
+        self.__session.close()
